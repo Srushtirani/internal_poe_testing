@@ -1,0 +1,6 @@
+flask
+scikit-learn
+joblib
+pandas
+pytest
+evidently==0.7.23
