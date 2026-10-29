@@ -1,6 +1,6 @@
 flask
 scikit-learn
 joblib
-pandas
+pandas==2.2.3
 pytest
 evidently==0.7.23
