@@ -1,29 +1,43 @@
+
 pipeline {
     agent any
 
     stages {
         stage('Install Dependencies') {
             steps {
-                bat 'python -m pip install -r requirements.txt'
+                bat '''
+                if not exist venv\\Scripts\\python.exe python -m venv venv
+                venv\\Scripts\\python.exe -m pip install --upgrade pip
+                venv\\Scripts\\python.exe -m pip install -r requirements.txt
+                '''
             }
         }
 
-        stage('Train Model') {
+        stage('Train Diabetes Model') {
             steps {
-                bat 'python train.py'
+                bat 'venv\\Scripts\\python.exe train.py'
             }
         }
 
         stage('Run Pytest') {
             steps {
-                bat 'python -m pytest -v'
+                bat 'venv\\Scripts\\python.exe -m pytest -v'
             }
         }
 
         stage('Evidently Monitoring') {
             steps {
-                bat 'python monitor.py'
+                bat 'venv\\Scripts\\python.exe monitor.py'
             }
+        }
+    }
+
+    post {
+        success {
+            echo 'Diabetes MLOps Pipeline completed successfully!'
+        }
+        failure {
+            echo 'Pipeline failed. Check Console Output.'
         }
     }
 }
